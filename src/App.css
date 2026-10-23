@@ -1,0 +1,53 @@
+/* ==========================================================================
+   GLOBAL APP RESETS & BASE VARIABLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box; /* Prevents padding from breaking element widths */
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Premium Dark Mode Palette */
+  --bg-color: #0b0f19;       /* Deep tech-slate canvas backdrop */
+  --text-main: #f8fafc;      /* Crisp, bright off-white for high readability */
+  --text-muted: #94a3b8;     /* Soft slate grey for secondary text & paragraphs */
+  --accent-color: #0076ff;   /* Matches your brand's core blue accent */
+  
+  /* Smooth system default scrolling */
+  scroll-behavior: smooth; 
+}
+
+/* ==========================================================================
+   FULL BODY RESET
+   ========================================================================== */
+body {
+  /* 1. Core Typography Strategy */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+               Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-color);
+  
+  /* 2. Text Rendering Enhancements for High-Res Screens */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 3. Screen Dimensions & Horizontal Wobble Prevention */
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Stops horizontal scrolling layout breaks on mobile */
+  
+  /* 4. Full Height Flexbox Engine Layout */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure the root React node occupies full window height */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}

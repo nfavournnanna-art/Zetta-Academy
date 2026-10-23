@@ -1,0 +1,928 @@
+/* ==========================================================================
+   GLOBAL APP RESETS & BASE VARIABLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box; /* Prevents padding from breaking element widths */
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Premium Dark Mode Palette */
+  --bg-color: #0b0f19;       /* Deep tech-slate canvas backdrop */
+  --text-main: #f8fafc;      /* Crisp, bright off-white for high readability */
+  --text-muted: #94a3b8;     /* Soft slate grey for secondary text & paragraphs */
+  --accent-color: #0076ff;   /* Matches your brand's core blue accent */
+  
+  /* Smooth system default scrolling */
+  scroll-behavior: smooth; 
+   user-select: none;
+}
+
+/* ==========================================================================
+   FULL BODY RESET
+   ========================================================================== */
+body {
+  /* 1. Core Typography Strategy */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+               Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-color);
+  
+  /* 2. Text Rendering Enhancements for High-Res Screens */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 3. Screen Dimensions & Horizontal Wobble Prevention */
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Stops horizontal scrolling layout breaks on mobile */
+  
+  /* 4. Full Height Flexbox Engine Layout */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure the root React node occupies full window height */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+
+
+
+
+/* 1. Main Navbar Container */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff; /* Clean white background */
+  padding: 15px 35px;
+  font-family: 'Inter', sans-serif;
+  border-bottom: 1px solid #e2e8f0; /* Subtle light gray bottom divider */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); /* Very soft shadow for depth */
+  position: fixed;      /* 1. Tells the element to stick when it reaches its threshold */
+  top: 0;                /* 2. Sets the stick threshold right at the very top of the window */
+  z-index: 1000;         /* 3. Ensures the navbar sits on top of all other page text and images */
+  width: 100%;           /* 4. Keeps the bar stretched full width while floating */
+  box-sizing: border-box;/* Prevent padding from pushing the bar off screen */
+}
+
+.logo-box {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85; /* Tightens the spacing between top and bottom lines */
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  user-select: none; /* Prevents awkward highlighting when clicked */
+  transition: transform 0.2s ease;
+}
+
+/* Subtle click feedback interaction */
+.logo-box:active {
+  transform: scale(0.96);
+}
+
+.logo-main {
+  font-size: 1.95rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  
+  /* Modern neon gradient boundary */
+  background: linear-gradient(135deg, #0076ff, #00d4ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Smooth transition for hover effect */
+  transition: filter 0.3s ease;
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #888888;
+  letter-spacing: 5px; /* Spaces out letters perfectly to align with ZETTA */
+  padding-left: 2px;   /* Offsets the letter-spacing tail on the last letter */
+  transition: color 0.3s ease;
+}
+
+/* --- Interactive Hover Effects --- */
+.logo-box:hover .logo-main {
+  /* Shifts the gradient hue slightly for a dynamic glowing shimmer look */
+  filter: hue-rotate(15deg) brightness(1.1);
+}
+
+.logo-box:hover .logo-sub {
+  color: #00d4ff; /* Glows matching the gradient when hovered */
+}
+
+.nav-toggle{
+  display: none;
+  background:none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+
+
+
+
+
+/* 3. Navigation Links List */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  
+}
+
+/* Main level links and dropdown triggers */
+.nav-links a, .dropdown-trigger {
+  color: #475569; /* Soft charcoal gray for high readability */
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 0;
+  transition: color 0.15s ease;
+}
+
+
+
+.nav-links a:hover, .dropdown-trigger:hover {
+  color: #0f172a; /* Turns dark slate when hovered */
+}
+
+/* 4. Dropdown Boundary Container */
+.dropdown-container {
+  position: relative;
+  padding-bottom: 5px; 
+  margin-right: 2rem;
+}
+
+/* 5. Floating Dropdown Menu Card */
+.dropdown-menu {
+  display: none; 
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff; /* Matches navbar */
+  list-style: none;
+  padding: 8px 0;
+  margin: 4px 0 0 0;
+  min-width: 300px; /* Wide box so long course titles look neat */
+  border: 1px solid #e2e8f0; /* Crisp thin border */
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05); /* Premium shadow */
+  z-index: 100;
+}
+
+/* Individual links inside the dropdown */
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 20px;
+  color: #475569;
+  font-weight: 400;
+  border-radius: 4px;
+  margin: 0 6px; /* Inset effect when highlighted */
+  list-style: none;
+}
+
+/* Hovering inside the menu card */
+.dropdown-menu li a:hover {
+  background-color: #f1f5f9; /* Subtle light gray highlight block */
+  color: #2563eb; /* Modern tech blue accent color */
+ 
+}
+
+/* The hover interaction utility */
+.dropdown-container:hover .dropdown-menu {
+  display: block;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+/* 6. Special Call-to-Action: Apply Button */
+.apply-btn {
+  background-color: #3423cf; /* High-contrast royal blue */
+  color: #ffff !important; /* Forces white text over the blue button */
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: background-color 0.15s ease !important;
+}
+
+.apply-btn a{
+  color: #ffffff;
+}
+
+.apply-btn a:hover{
+  color: #f1f5f9;
+}
+
+.apply-btn:hover {
+ 
+  color: #ffffff;
+  background-color: #1613a7;
+}
+
+a{
+  text-decoration: none;
+}
+
+a:hover{
+  transform: scale(0.96);
+  color: #0b0f19;
+}
+
+li{
+  list-style: none;
+}
+
+img{
+  width: 120px;
+  height: auto;
+  background: (rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+}
+
+.hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  min-height: calc(100vh - 80px); /* Fills the viewport height, minus your navbar height */
+  padding: 40px 0;
+  width: 100vw;
+  
+}
+
+/* --- Left Column Style --- */
+.hero-content {
+  flex: 1; /* Takes up 50% width */
+  max-width: 600px;
+}
+
+.hero-title {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffff;
+  margin-bottom: 20px;
+  margin-left: 1.0rem;
+  text-align: center;
+}
+
+.hero-title .highlight {
+  color: #0076ff; /* Match your brand color */
+}
+
+.hero-subtitle {
+  font-size: 1.23rem;
+  color: #ddd0d0;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  margin-left: 1.0rem;
+  margin-right: 1.0;
+  text-align: center;
+}
+
+/* --- Call To Action Buttons --- */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 1.5rem;
+}
+
+.btn-primary {
+  background-color: #0076ff;
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #fff;
+  border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+  border-color: #333;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* --- Right Column Style --- */
+.hero-image-wrapper {
+  flex: 1; /* Takes up the other 50% width */
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 500px; /* Keeps the image scaling neatly */
+  height: auto;
+  object-fit: contain;
+}
+
+.why-choose-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+  width: 100%;
+}
+
+/* --- Section Header Layout --- */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+}
+
+/* Brings the custom brand logo gradient into your header text inline */
+.logo-main-inline {
+  background: linear-gradient(135deg, #0076ff, #00d4ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.section-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Responsive Auto-Fitting Grid --- */
+.features-grid {
+  display: grid;
+  /* Automatically wraps cards to the next row if they drop below 250px */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+/* --- Premium Tech-Slate Card Styling --- */
+.feature-card {
+  background: rgba(15, 23, 42, 0.6); /* Translucent dark glass */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 30px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Interactive Hover States */
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 118, 255, 0.3); /* Subtle glow border mapping your logo blue */
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 10px 30px -15px rgba(0, 118, 255, 0.2);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.feature-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.feature-card-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .hero-container {
+    flex-direction: column-reverse; /* Puts image on top, text on bottom on mobile */
+    text-align: center;
+    min-height: auto;
+    padding: 60px 0;
+    height: 100svh;
+    width: 100vw;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+  }
+
+.hero-subtitle{
+   margin-left: 1.0rem;
+  margin-right: 1.0;
+  text-align: center;
+}
+
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
+.services-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+  width: 100%;
+}
+
+/* --- Section Title Setup --- */
+.services-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.services-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+}
+
+.services-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Columns Flexbox / Grid Engine --- */
+.services-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+/* --- Individual Service Card Structure --- */
+.service-column {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  gap: 20px;
+}
+
+.service-column:hover {
+  border-color: rgba(0, 212, 255, 0.2); /* Locks onto the logo cyan tone */
+  box-shadow: 0 20px 40px -20px rgba(0, 212, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* --- Text & Lists Elements --- */
+.service-badge {
+  background: rgba(0, 118, 255, 0.1);
+  color: #00d4ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.service-column-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 25px;
+}
+
+.service-list {
+  list-style: none;
+  width: 100%;
+  margin-bottom: 35px;
+  flex-grow: 1; /* Pushes the button to the bottom so all buttons line up perfectly */
+   width: 100%;
+  
+  /* 💡 ADJUST SPACING AROUND THE ENTIRE LIST BOX */
+  margin-top: 15px;    /* Pushes list down, away from the card title */
+  margin-bottom: 40px; /* Pushes the CTA button further down away from the list */
+  
+ 
+}
+
+.service-item {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  
+  /*  INCREASE THIS VALUE FOR MORE ROOM */
+  margin-bottom: 20px; /* Upgraded from 12px for better breathing room */
+  
+
+}
+
+/* Pro-Tip: Removes the extra spacing on the very last item in the list */
+.service-item:last-child {
+  margin-bottom: 0;
+}
+
+.service-item .checkmark {
+  color: #0076ff; /* Your core brand blue */
+  font-weight: bold;
+}
+
+/* --- Interactive Action Buttons --- */
+.service-button {
+  width: 100%;
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.service-button:hover {
+  background: var(--text-main);
+  color: var(--bg-color); /* Flips typography colors cleanly on dark background */
+  border-color: var(--text-main);
+}
+
+
+/* ==========================================================================
+   FAQ ACCORDION STYLES
+   ========================================================================== */
+.faq-section {
+  max-width: 800px; /* Kept narrower than columns for great article readability */
+  margin: 0 auto;
+  padding: 100px 20px;
+  width: 100%;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.faq-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 15px;
+}
+
+.faq-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.faq-item:hover, .faq-item.open {
+  border-color: rgba(0, 118, 255, 0.25);
+}
+
+.faq-question-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  gap: 20px;
+}
+
+.faq-icon {
+  font-size: 1.4rem;
+  color: #00d4ff;
+  transition: transform 0.2s ease;
+}
+
+/* Max-height transition technique for pure, buttery-smooth CSS dropdown slides */
+.faq-answer-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item.open .faq-answer-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer-content {
+  overflow: hidden;
+}
+
+.faq-answer-content p {
+  padding: 0 24px 24px 24px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   CLEAN FIXED FOOTER STYLES
+   ========================================================================== */
+.app-footer {
+  background: #060911; /* Slightly darker than main body for anchoring contrast */
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 80px 20px 30px 20px;
+  margin-top: auto; /* Standard push mechanism to anchor to page limits */
+  width: 100%;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin-bottom: 60px;
+}
+
+.footer-brand {
+  max-width: 320px;
+}
+
+.footer-tagline {
+  margin-top: 15px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.footer-links-grid {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-column h4 {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.footer-column a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+  color: #00d4ff;
+}
+
+/* Bottom Strip border division rules */
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  padding-top: 30px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.testimonial-section{
+   max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+  width: 100%;
+}
+
+.testimonial-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.testimonial-header-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+}
+
+.testimonial-header-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Responsive Auto-Fitting Grid --- */
+.testimonial-grid {
+  display: grid;
+  /* Automatically wraps cards to the next row if they drop below 250px */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.testimonial-card {
+  background: rgba(15, 23, 42, 0.6); /* Translucent dark glass */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 30px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Interactive Hover States */
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 118, 255, 0.3); /* Subtle glow border mapping your logo blue */
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 10px 30px -15px rgba(0, 118, 255, 0.2);
+}
+
+.testimonial-avatar {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.testimonial-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.testimonial-card-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+ .testimonial-avatar{
+width: 100%;
+  height: 200px;        /* Fixed height looks uniform in grids */
+  aspect-ratio: 16 / 9; /* Alternative modern way to lock proportions */
+  object-fit: cover;    /* Centers and scales image without squishing it */
+  object-position: center;
+}
+
+.container{
+   max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+  width: 100%;
+  background-color: #031227;
+  border: none;
+  border-radius: 12px;
+  display: grid;
+  flex-direction: row;
+  width: 100vw;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(assets/image4.jpg);
+}
+
+button{
+  padding: 8px 20px;
+  font-size: 20px;
+  margin: 0, 10px;
+   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+   border-radius: 6px;
+   font-weight: 600 !important;
+}
+
+.btn1{
+  background-color: rgb(3, 190, 3);
+  border: none;
+}
+
+.btn1:hover{
+  background-color: rgb(2, 105, 2);
+}
+
+ .fees{
+  /* border:  2px white; */
+  background-color: rgb(78, 56, 221);
+  border: none;
+}
+
+.fees:hover{
+  background-color: rgb(38, 21, 148);
+}
+
+.button-container{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 20px;
+  grid-template-columns: 2fr;
+}
+/* Tablet and Smartphone Layout Adjustments */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .footer-links-grid {
+    gap: 40px;
+    justify-content: space-between;
+    width: 100%;
+  }
+h1{
+  font-size: 3.2rem;
+  text-align: center;
+
+}
+
+h2{
+  font-size: 3rem;
+}
+
+}
+
+
+
